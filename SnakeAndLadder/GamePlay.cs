@@ -8,6 +8,7 @@ namespace SnakeAndLadder
     {
 
         static int STARTING_POSITION = 0;
+        static int ENDING_POSITION = 100;
         public const int LADDER = 1;
         public const int SNAKE = 2;
         public const int NOPLAY = 0;
@@ -19,32 +20,58 @@ namespace SnakeAndLadder
         }
         public void Play()
         {
-            int diceValue = 0, option, position;
-            position = STARTING_POSITION;
+            int diceValue = 0, option, currentPosition, endPosition;
             diceValue = rollDice();
             option = random.Next(0, 3);
-
-            switch (option)
+            endPosition = ENDING_POSITION;
+            rollDice();
+            for (currentPosition = STARTING_POSITION; currentPosition<= endPosition; currentPosition++)
             {
-                case NOPLAY:
-                    Console.WriteLine("No Play , Pass the chance");
-                    break;
-                case LADDER:
-                    Console.WriteLine("You got ladder");
-                    position += diceValue;
-                    Console.WriteLine("Your position is :" + position);
-                    break;
-                case SNAKE:
-                    Console.WriteLine("You got Snake");
-                    position -= diceValue;
-                    if (position < 0)
-                        Console.WriteLine("Your position is 0 ");
-                    else
-                        Console.WriteLine("Your position is :" + position);
-                    break;
-                default:
-                    break;
+                if (currentPosition <= endPosition)
+                {
+                    switch (option)
+                    {
+                        case NOPLAY:
+                            Console.WriteLine("No Play , Pass the chance");
+                            break;
+                        case LADDER:
+                            if (currentPosition + diceValue <= ENDING_POSITION)
+                            {
+                                Console.WriteLine("You got Ladder");
+                                currentPosition += diceValue;
+                            }
+
+                            Console.WriteLine("Your position is :" + currentPosition);
+                            break;
+                        case SNAKE:
+                            if (currentPosition - diceValue >= STARTING_POSITION)
+                            {
+                                if (currentPosition < 0)
+                                    Console.WriteLine("Your position is 0 ");
+                                else
+                                {
+                                    Console.WriteLine("You got Snake");
+                                    currentPosition -= diceValue;
+                                    Console.WriteLine("Your position is :" + currentPosition);
+                                }
+
+                            }
+
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid position");
+                    currentPosition = currentPosition - diceValue;
+                    Console.WriteLine("Your position is :" + currentPosition);
+
+                }
             }
+
         }
+
     }
 }
